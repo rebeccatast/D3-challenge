@@ -1,4 +1,3 @@
-// @TODO: YOUR CODE HERE!
 function makeResponsive() {
 
     let svgWidth = 960;
