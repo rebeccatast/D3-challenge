@@ -83,41 +83,7 @@ function makeResponsive() {
             .attr("font-size", "12px")
             .attr("fill", "black");
          
-            console.log(riskData);
-            
-    
-        //circlesGroup
-        //.on('mouseover', function(data) {
-         // toolTip.text(d=> d.abbr);
-          
-       // })
-        // Step 3: Add an onmouseout event to make the tooltip invisible
-        //.on('mouseout', function() {
-         // toolTip.style('display', 'none');
-       // });
-        
-    
-           
-    
-            
-             // var toolTip = d3
-              //.select('body')
-              //.append('div')
-              //.attr('class', 'tooltip');
-       
-            
-            
-           
-          
-            
-    
-        
-        
-             
-        
-    
-        
-            //Make labels for the healthrisk graph
+            console.log(riskData)
     
         chartGroup.append("text")
           .attr("transform", "rotate(-90)")
@@ -137,4 +103,4 @@ function makeResponsive() {
     });
     }
     
-    makeResponsive();
+makeResponsive();
