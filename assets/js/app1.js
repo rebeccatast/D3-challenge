@@ -43,22 +43,22 @@ function makeResponsive() {
     var chosenYAxis = "healthcare";
   
     // Function for Updating xScale Upon Click on Axis Label
-    function xScale(acsData, chosenXAxis) {
+    function xScale(riskData, chosenXAxis) {
       // Create Scale Functions for the Chart (chosenXAxis)
       var xLinearScale = d3.scaleLinear()
-        .domain([d3.min(acsData, d => d[chosenXAxis]) * 0.8,
-          d3.max(acsData, d => d[chosenXAxis]) * 1.2
+        .domain([d3.min(riskData, d => d[chosenXAxis]) * 0.8,
+          d3.max(riskData, d => d[chosenXAxis]) * 1.2
         ])
         .range([0, width]);
       return xLinearScale;
     }
   
     // Function for Updating yScale Upon Click on Axis Label
-    function yScale(acsData, chosenYAxis) {
+    function yScale(riskData, chosenYAxis) {
       // Create Scale Functions for the Chart (chosenYAxis)
       var yLinearScale = d3.scaleLinear()
-        .domain([d3.min(acsData, d => d[chosenYAxis]) * 0.8,
-          d3.max(acsData, d => d[chosenYAxis]) * 1.2
+        .domain([d3.min(riskData, d => d[chosenYAxis]) * 0.8,
+          d3.max(riskData, d => d[chosenYAxis]) * 1.2
         ])
         .range([height, 0]);
       return yLinearScale;
@@ -128,21 +128,18 @@ function makeResponsive() {
   
       // Initialize Tool Tip
       var toolTip = d3.tip()
-        .attr("class", "tooltip d3-tip")
-        .offset([90, 90])
-        .html(function(d) {
-          return (`<strong>${d.abbr}</strong><br>${xLabel} ${d[chosenXAxis]}<br>${yLabel} ${d[chosenYAxis]}`);
-        });
-      // Create Circles Tooltip in the Chart
+        .attr('class', 'd3-tip')
+        .offset([-8, 0])
+        .html(function (d) {
+            return (`${d.state}<br>${xLabel} ${styleX(d[chosenXAxis], chosenXAxis)}<br>${yLabel} ${d[chosenYAxis]}%`);
+      });
       circlesGroup.call(toolTip);
-      // Create Event Listeners to Display and Hide the Circles Tooltip
-      circlesGroup.on("mouseover", function(data) {
-        toolTip.show(data, this);
-      })
-        // onmouseout Event
-        .on("mouseout", function(data) {
-          toolTip.hide(data);
-        });
+      //add
+      circlesGroup.on('mouseover', toolTip.show)
+      .on('mouseout', toolTip.hide);
+            return circlesGroup;
+}
+      
       // Create Text Tooltip in the Chart
       textGroup.call(toolTip);
       // Create Event Listeners to Display and Hide the Text Tooltip
@@ -157,11 +154,11 @@ function makeResponsive() {
     }
   
     // Import Data from the data.csv File & Execute Everything Below
-    d3.csv("assets/data/data.csv")
-      .then(function(acsData) {
+    d3.csv("/assets/data/data.csv")
+      .then(function(riskData) {
   
       // Format/Parse the Data (Cast as Numbers)
-      acsData.forEach(function(data) {
+      riskData.forEach(function(data) {
         data.poverty = +data.poverty;
         data.age = +data.age;
         data.income = +data.income;
@@ -171,8 +168,8 @@ function makeResponsive() {
       });
   
       // Create xLinearScale & yLinearScale Functions for the Chart
-      var xLinearScale = xScale(acsData, chosenXAxis);
-      var yLinearScale = yScale(acsData, chosenYAxis);
+      var xLinearScale = xScale(riskData, chosenXAxis);
+      var yLinearScale = yScale(riskData, chosenYAxis);
   
       // Create Axis Functions for the Chart
       var bottomAxis = d3.axisBottom(xLinearScale);
@@ -191,7 +188,7 @@ function makeResponsive() {
   
       // Create & Append Initial Circles
       var circlesGroup = chartGroup.selectAll(".stateCircle")
-        .data(acsData)
+        .data(riskData)
         .enter()
         .append("circle")
         .attr("cx", d => xLinearScale(d[chosenXAxis]))
@@ -202,7 +199,7 @@ function makeResponsive() {
   
       // Append Text to Circles
       var textGroup = chartGroup.selectAll(".stateText")
-        .data(acsData)
+        .data(riskData)
         .enter()
         .append("text")
         .attr("x", d => xLinearScale(d[chosenXAxis]))
@@ -284,7 +281,7 @@ function makeResponsive() {
             // Replaces chosenXAxis with Value
             chosenXAxis = value;
             // Updates xScale for New Data
-            xLinearScale = xScale(acsData, chosenXAxis);
+            xLinearScale = xScale(riskData, chosenXAxis);
             // Updates xAxis with Transition
             xAxis = renderXAxes(xLinearScale, xAxis);
             // Updates Circles with New Values
@@ -339,7 +336,7 @@ function makeResponsive() {
             // Replaces chosenYAxis with Value
             chosenYAxis = value;
             // Updates yScale for New Data
-            yLinearScale = yScale(acsData, chosenYAxis);
+            yLinearScale = yScale(riskData, chosenYAxis);
             // Updates yAxis with Transition
             yAxis = renderYAxes(yLinearScale, yAxis);
             // Updates Circles with New Values
