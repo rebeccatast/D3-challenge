@@ -1,1 +1,3 @@
 # D3-challenge
+
+Using data acquired from the U.S Census Bureau and the Behavioral Risk Factor Surveillance System (data.csv), this project looked at graphing potential relationships between items such as age, median income, healthcare access, smoking, and obesity rates from 2014 for all 50 states. Specifically, I created a scatter plot to show the variables of percentage of indviduals who lack healthcare vs. the percentage of individuals in poverty. Each of the circles on the chart shows the abbreviations for each state. The scatter plot was created using D3 techniques, showing poverty percentages on the x-axis and lack of healthcare percentages on the y-axis. 
